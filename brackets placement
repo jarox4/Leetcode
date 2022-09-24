@@ -1,0 +1,101 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace _21_
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            var result = something(3);
+            foreach (var line in result) 
+            {
+                Console.WriteLine(line);
+            }
+            Console.ReadLine();
+        }
+        private static List<string> something (int pair) 
+        {
+            List<PairKeyValue<Couple, string>> variations = new List<PairKeyValue<Couple, string>>();
+            variations.Add(new PairKeyValue<Couple, string> (new Couple(pair), string.Empty));
+            for (int i = 0; i <= pair  * 2; i++) 
+            {
+                Recurtion(ref variations);
+            }
+            List<string> result = new List<string>();
+            foreach (PairKeyValue<Couple, string> Pair in variations) 
+            {
+                result.Add(Pair.line);
+            }
+            return result;
+        }
+        private static void Recurtion(ref List<PairKeyValue<Couple, string>> variations) 
+        {
+            foreach (PairKeyValue<Couple, string> pair1 in variations) 
+            {
+                if (pair1.couple.left == pair1.couple.right && pair1.couple.left != 0)
+                {
+                    pair1.line += '(';
+                    pair1.couple.left--;
+                    continue;
+                }
+                else if (pair1.couple.left < pair1.couple.right && pair1.couple.left != 0)
+                {
+                    PairKeyValue<Couple, string> pair2 = pair1.Clone() as PairKeyValue<Couple, string>;
+                    pair1.couple.left--;
+                    pair1.line += '(';
+                    pair2.couple.right--;
+                    pair2.line += ')';
+                    variations.Add(pair2);
+                    break;
+                }
+                else if (pair1.couple.left < pair1.couple.right && pair1.couple.left == 0) 
+                {
+                    pair1.couple.right--;
+                    pair1.line += ')';
+                }
+            }
+        }
+    }
+    class Couple: ICloneable
+    {
+        public object Clone() 
+        {
+            return this.MemberwiseClone();
+        }
+        public Couple(int pair)
+        {
+            left = pair;
+            right = pair;
+        }
+        public Couple() 
+        {
+
+        }
+        public int left = 0;
+        public int right = 0;
+    }
+    class PairKeyValue<K, V>
+        where K: Couple
+    {
+        public object Clone() 
+        {
+            PairKeyValue<Couple, string> clone = (PairKeyValue<Couple, string>)this.MemberwiseClone();
+            clone.couple = (Couple)this.couple.Clone();
+            return clone;
+        }
+        public PairKeyValue() 
+        {
+            
+        }
+        public PairKeyValue(K _key, V _value) 
+        {
+            couple = _key;
+            line = _value;
+        }
+        public K couple;
+        public V line;
+    }

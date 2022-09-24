@@ -1,0 +1,52 @@
+using System;
+
+
+class abc
+{
+    public static void Main()
+    {
+        {
+            var a = new int[] {1,3,5};
+            var b = new int[] {2,4,6};
+            ArrayDiff(ref a,ref b);
+        }
+        Console.ReadLine();
+    }
+    public static void ArrayDiff(ref int [] a, ref int [] b)
+    {
+        Array.Sort(a);
+        Array.Sort(b);
+        if (a.Length >= b.Length) 
+        {
+            for (int i = 0; i < b.Length; i++) 
+            {
+                for (int j = 0; j < a.Length; j++) 
+                {
+                    if (a[j] > b[i])
+                    {
+                        int temp = a[j];
+                        a[j] = b[i];
+                        b[i] = temp;
+                    }
+                }
+            }
+        }
+        if (a.Length < b.Length)
+        {
+            for (int i = 0; i < a.Length; i++)
+            {
+                for (int j = 0; j < b.Length; j++)
+                {
+                    if (a[i] > b[j])
+                    {
+                        int temp = a[i];
+                        a[i] = b[j];
+                        b[j] = temp;
+                    }
+                }
+            }
+        }
+        Array.Sort(a);
+        Array.Sort(b);
+    }
+}

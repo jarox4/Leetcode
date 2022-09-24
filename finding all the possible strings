@@ -1,0 +1,32 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace _16 
+{
+    class Program 
+    {
+        public static void Main()
+        {
+            Console.WriteLine(FindingCombinations("abcdee").Count);
+            Console.ReadLine();
+        }
+        public static List<string> FindingCombinations(string line) 
+        {
+            if (line.Length == 1) 
+            {
+                return new List<string> {line };
+            }
+            HashSet<string> combinations = new HashSet<string>();
+            foreach (var letter in line) 
+            {
+                foreach (var ending in FindingCombinations(line.Remove(0,1))) 
+                {
+                    combinations.Add(letter + ending);
+                }
+            }
+            return new List<string>(combinations);
+        }
+    }
+}

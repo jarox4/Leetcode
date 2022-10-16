@@ -1,0 +1,73 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp1
+{
+    class Program
+    {
+        public static void Main(string[] args)
+        {
+            int[] candidates = new int[] {1,1};
+            var result = Start(candidates, 2);
+        }
+        private static IList<IList<int>> Start (int[] candidates, int target) 
+        {
+            List<IList<int>> result = new List<IList<int>>();
+            List<int> current = new List<int>();
+            Array.Sort(candidates);
+            _CombinationSum2(candidates, target, 0, current, result);
+            return result;
+        }
+        private static void _CombinationSum2(int[] candidates, int target, int index, List<int> current, List<IList<int>> result)
+        {
+            if (index >= candidates.Count()) 
+            {
+                return;
+            }
+            int sum = current.Sum() + candidates[index];
+            if (target == sum)
+            {
+                current.Add(candidates[index]);
+                List<int> toAddBecauseOfWeirdError = new List<int>();
+                foreach (var item in current) 
+                {
+                    toAddBecauseOfWeirdError.Add(item);
+                }
+                result.Add(toAddBecauseOfWeirdError);
+                current.RemoveAt(current.Count() - 1);
+            }
+            else if (sum > target) 
+            {
+                
+            }
+            else
+            {
+                //we recall it 2 times
+                //1-st:
+                //we add the next number
+
+                current.Add(candidates[index]);
+                _CombinationSum2(candidates, target, index + 1, current, result);
+                //backtrack
+                current.RemoveAt(current.Count() - 1);
+
+
+
+                //2-nd:
+                //we skip all the duplicate numbers
+
+                //we find the next non-duplicate number
+                int tempIndex = index + 1;
+                while (tempIndex < candidates.Count() && candidates[tempIndex] == candidates[index])
+                {
+                    tempIndex++;
+                }
+                _CombinationSum2(candidates, target, tempIndex, current, result);
+            }
+        }

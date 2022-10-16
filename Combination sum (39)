@@ -1,0 +1,62 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp1
+{
+    class Program
+    {
+        public static void Main(string[] args)
+        {
+            int[] candidates = new int[] {2,3,5};
+            var result = Start(candidates, 8);
+        }
+        private static IList<IList<int>> Start (int[] candidates, int target) 
+        {
+            Array.Sort(candidates);
+            List<IList<int>> result = new List<IList<int>>();
+            List<int> current = new List<int>();
+            _CombinationsSum(candidates, target, 0, current, result);
+            return result;
+        }
+        private static void _CombinationsSum(int[] candidates, int target, int index, List<int> current, List<IList<int>> result) 
+        {
+            if (index >= candidates.Count()) 
+            {
+                return;
+            }
+            int sum = current.Sum() + candidates[index];
+            if (sum > target)
+            {
+                //if current sum is bigger than target then all the next will be only higher
+                //so we break the loop
+            }
+            else if (sum == target)
+            {
+                //we found the combination
+                //so we add it to the result
+                current.Add(candidates[index]);
+                result.Add(new List<int> (current));
+                //backtrack
+                current.RemoveAt(current.Count() - 1);
+            }
+            else
+            {
+                // there we do 2 flows
+                //1. We add same number
+                current.Add(candidates[index]);
+                _CombinationsSum(candidates, target, index, current, result);
+                //backtracking
+                current.RemoveAt(current.Count() - 1);
+
+                //2 we dont add it and go to the next number in the array
+                _CombinationsSum(candidates, target, index + 1, current, result);
+            }
+        }
+    }
+}

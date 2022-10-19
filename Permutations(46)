@@ -1,0 +1,38 @@
+public class Solution {
+    public IList<IList<int>> PermuteUnique(int[] nums) {
+        return GetAnswer(nums);
+    }
+    public static List<IList<int>> GetAnswer(int [] nums)
+        {
+            List<IList<int>> result = new List<IList<int>>();
+            List<int> current = new List<int>();
+            List<int> indexesIn = new List<int>();          //this list contains indexes of numbers that are in current
+            PermutationFinder(nums, result, current, indexesIn);
+            return result;
+        }
+        public static void PermutationFinder(int[] nums, List<IList<int>> result, List<int> current, List<int> indexesIn) 
+        {
+            if (current.Count() == nums.Length)
+            {
+                if (!result.Contains(current)) 
+                {
+                    result.Add(new List<int>(current));
+                }
+            }
+            else
+            {
+                //we go through each number in array and add each unadded
+                for (int i = 0; i < nums.Length; i++)
+                {
+                    if (!indexesIn.Contains(i))
+                    {
+                        current.Add(nums[i]);
+                        indexesIn.Add(i);
+                        PermutationFinder(nums, result, current, indexesIn);
+                        indexesIn.RemoveAt(indexesIn.Count() - 1);
+                        current.RemoveAt(current.Count() - 1);
+                    }
+                }
+            }
+        }
+}

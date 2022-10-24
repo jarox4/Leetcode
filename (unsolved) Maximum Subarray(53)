@@ -1,0 +1,49 @@
+using Microsoft.VisualBasic;
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Net;
+using System.IO;
+using System.Collections.Specialized;
+using System.Data;
+using System.Globalization;
+
+namespace ConsoleApp1
+{
+    class Program
+    {
+        public static void Main(string[] args)
+        {
+            int[] nums = new int[] { -2, 1, -3, 4, -1, 2, 1, -5, 4 };
+            MaxSubArraySum(nums);
+        }
+        public static int MaxSubArraySum(int[] nums) 
+        {
+            int biggestSum = nums.Min();
+            
+            for (int number = 0; number < nums.Length; number++) 
+            {
+                List<int> current = new List<int> { number };
+                if (current.Sum() > biggestSum)
+                {
+                    biggestSum = current.Sum();
+                }
+                for (int innerNumber = number + 1; innerNumber < nums.Length; innerNumber++) 
+                {
+                    current.Add(nums[innerNumber]);
+                    if (current.Sum() > biggestSum) 
+                    {
+                        biggestSum = current.Sum();
+                    }
+                }
+            }
+            return biggestSum;
+        }
+    }
+}

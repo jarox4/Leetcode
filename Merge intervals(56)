@@ -1,0 +1,78 @@
+using Microsoft.VisualBasic;
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Net;
+using System.IO;
+using System.Collections.Specialized;
+using System.Data;
+using System.Globalization;
+using System.Transactions;
+
+namespace ConsoleApp1
+{
+    class Program
+    {
+        public static void Main(string[] args)
+        {
+            int[][] intervals = new int[][] { new int[] { 1, 4 }, new int[] { 1, 5 } };
+            var result = MergeIntervals(intervals);
+            for (int arrayIndex = 0; arrayIndex < result.Length; arrayIndex++)
+            {
+                Console.WriteLine($"{arrayIndex} - {result[arrayIndex][0]}, {result[arrayIndex][1]}");
+            }
+        }
+        public static int[][] MergeIntervals(int[][] intervals)
+        {
+            IList<int[]> changeableIntervals = new List<int[]>(intervals);
+            for (int firstIntervalIndex = 0; firstIntervalIndex < changeableIntervals.Count(); firstIntervalIndex++)
+            {
+                for (int secondIntervalIndex = firstIntervalIndex + 1; secondIntervalIndex < changeableIntervals.Count(); secondIntervalIndex++)
+                {
+                    int[] currentInterval = changeableIntervals[firstIntervalIndex];
+                    int[] secondInterval = changeableIntervals[secondIntervalIndex];
+                    if (Overlaps(currentInterval, secondInterval))
+                    {
+                        int firstMin = new int[] { currentInterval[0], secondInterval[0] }.Min();
+                        int secondMax = new int[] { currentInterval[1], secondInterval[1] }.Max();
+                        changeableIntervals.Add(new int[] { firstMin, secondMax });
+                        changeableIntervals.Remove(currentInterval);
+                        changeableIntervals.Remove(secondInterval);
+                        firstIntervalIndex -= 1;
+                        break;
+
+                    }
+                }
+            }
+            int[][] toReturn = new int[changeableIntervals.Count()][];
+            changeableIntervals.CopyTo(toReturn, 0);
+            return toReturn;
+        }
+        public static bool Overlaps(int[] interval1, int[] interval2)
+        {
+            int first1 = interval1[0];
+            int first2 = interval1[1];
+
+            int second1 = interval2[0];
+            int second2 = interval2[1];
+            if (first1 == second1 || first1 == second2 || first2 == second1 || first2 == second2)
+                return true;
+            if (first1 <= second1 && first2 >= second2)
+                return true;
+            if (first1 < second1 && first2 > second1 && first2 < second2)
+                return true;
+            //mirrored
+            if (first1 > second1 && first2 < second2)
+                return true;
+            if (first1 > second1 && second2 > first1 && first2 > second2)
+                return true;
+            return false;
+        }
+    }
+}

@@ -1,0 +1,35 @@
+using System;
+using System.Net.Security;
+using System.Numerics;
+using System.Runtime.CompilerServices;
+using System.Text;
+
+namespace Olimp
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            int value = 4;
+            Console.WriteLine(SquareRoot(value));
+        }
+        public static int SquareRoot(int square)
+        {
+            int root = 1;
+            while (root * root < square)
+            {
+                root += 10;
+                if (root * root < 0)
+                {
+                    root--;
+                    break;
+                }
+            }
+            while (root * root > square)
+            {
+                root--;
+            }
+            return root;
+        }
+    }
+}

@@ -1,0 +1,23 @@
+public class Solution {
+    public int ClimbStairs(int n) 
+    {
+        return AllWaysClimbing(n);
+    }
+    public static int AllWaysClimbing (int top) 
+        {
+            if (top == 1 || top == 0) 
+            {
+                return top;
+            }
+            int current = 1;
+            int previous = 0;
+            int result = 0;
+            for (int i = 0; i < top; i++) 
+            {
+                result = current + previous;
+                previous = current;
+                current = result;
+            }
+            return result;
+        }
+}

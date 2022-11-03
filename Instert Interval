@@ -1,0 +1,71 @@
+public class Solution {
+    public int[][] Insert(int[][] intervals, int[] newInterval) 
+    {
+        int[][] _intervals = new int[intervals.Length + 1][];
+        intervals.CopyTo(_intervals, 0);
+        _intervals[_intervals.Length - 1] = newInterval;
+        return MergeIntervals(_intervals);
+    }
+    public static int[][] MergeIntervals(int[][] intervals)
+        {
+            IList<int[]> changeableIntervals = new List<int[]>(intervals);
+            for (int firstIntervalIndex = 0; firstIntervalIndex < changeableIntervals.Count(); firstIntervalIndex++)
+            {
+                for (int secondIntervalIndex = firstIntervalIndex + 1; secondIntervalIndex < changeableIntervals.Count(); secondIntervalIndex++)
+                {
+                    int[] currentInterval = changeableIntervals[firstIntervalIndex];
+                    int[] secondInterval = changeableIntervals[secondIntervalIndex];
+                    if (Overlaps(currentInterval, secondInterval))
+                    {
+                        int firstMin = new int[] { currentInterval[0], secondInterval[0] }.Min();
+                        int secondMax = new int[] { currentInterval[1], secondInterval[1] }.Max();
+                        changeableIntervals.Add(new int[] { firstMin, secondMax });
+                        changeableIntervals.Remove(currentInterval);
+                        changeableIntervals.Remove(secondInterval);
+                        firstIntervalIndex -= 1;
+                        break;
+
+                    }
+                }
+            }
+            int[][] toReturn = new int[changeableIntervals.Count()][];
+            changeableIntervals.CopyTo(toReturn, 0);
+            Sort(ref toReturn);
+            return toReturn;
+        }
+        public static bool Overlaps(int[] interval1, int[] interval2)
+        {
+            int first1 = interval1[0];
+            int first2 = interval1[1];
+
+            int second1 = interval2[0];
+            int second2 = interval2[1];
+            if (first1 == second1 || first1 == second2 || first2 == second1 || first2 == second2)
+                return true;
+            if (first1 <= second1 && first2 >= second2)
+                return true;
+            if (first1 < second1 && first2 > second1 && first2 < second2)
+                return true;
+            //mirrored
+            if (first1 > second1 && first2 < second2)
+                return true;
+            if (first1 > second1 && second2 > first1 && first2 > second2)
+                return true;
+            return false;
+        }
+        private static void Sort(ref int[][] intervals)
+        {
+            for (int firstIntervalIndex = 0; firstIntervalIndex < intervals.Length; firstIntervalIndex++)
+            {
+                for (int secondIntervalIndex = firstIntervalIndex + 1; secondIntervalIndex < intervals.Length; secondIntervalIndex++) 
+                {
+                    if (intervals[firstIntervalIndex][0] > intervals[secondIntervalIndex][0]) 
+                    {
+                        var temp = intervals[firstIntervalIndex];
+                        intervals[firstIntervalIndex] = intervals[secondIntervalIndex];
+                        intervals[secondIntervalIndex] = temp;
+                    }
+                }
+            }
+        }
+}

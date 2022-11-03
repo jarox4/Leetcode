@@ -1,0 +1,61 @@
+public class Solution {
+    public string Convert(string s, int numRows) 
+    {
+        return ZigZagConvert(s, numRows);
+    }
+    public static string ZigZagConvert (string line, int rows) 
+        {
+            if (rows == 1) 
+            {
+                return line;
+            }
+            string[] allStrings = new string[rows];
+            int totalLength = 0;
+            int currentLineIndex = 0;
+            int charIndex = 0;
+            bool isLeaveCycle = false;
+
+            while (totalLength < line.Length) 
+            {
+                for ( ; currentLineIndex < rows; currentLineIndex++) 
+                {
+                    if (charIndex == line.Length)
+                    {
+                        isLeaveCycle = true;
+                        break;
+                    }
+                    allStrings[currentLineIndex] += line[charIndex];
+                    charIndex++;
+                }
+                currentLineIndex = allStrings.Length - 2;
+
+                for (; currentLineIndex> 0; currentLineIndex--) 
+                {
+                    if (charIndex == line.Length)
+                    {
+                        isLeaveCycle = true;
+                        break;
+                    }
+                    allStrings[currentLineIndex] += line[charIndex];
+                    charIndex++;
+                }
+                if (isLeaveCycle) 
+                {
+                    break;
+                }
+
+                totalLength = 0;
+                for (int i = 0; i < allStrings.Length; i++) 
+                {
+                    totalLength += allStrings[i].Length;
+                }
+            }
+
+            string result = string.Empty;
+            foreach (var _string in allStrings) 
+            {
+                result += _string;
+            }
+            return result;
+        }
+}

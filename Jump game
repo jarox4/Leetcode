@@ -1,0 +1,34 @@
+public class Solution {
+    public bool CanJump(int[] nums) 
+    {
+        List<int> allWays = new List<int>();
+        JumpGame(nums, allWays, 0, 0);
+        return allWays.Count > 0;
+    }
+    public static void JumpGame(int[] nums, List<int> allWays, int currentIndex, int currentLength)
+        {
+            if (currentIndex >= nums.Count() - 1)
+            {
+                allWays.Add(currentLength);
+            }
+            else 
+            {
+                //going through all the possible ways
+                int temp = currentIndex;
+                for (int i = 0; i < nums[currentIndex];i++) 
+                {
+                    if (temp + 1 != nums.Length - 1)
+                    {
+                        if (nums[temp + 1] != 0) 
+                        {
+                            JumpGame(nums, allWays, temp + 1, currentLength);
+                        }
+                    }
+                    else 
+                    {
+                        JumpGame(nums, allWays, temp + 1, currentLength);
+                    }
+                }
+            }
+        }
+}

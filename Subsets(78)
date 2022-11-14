@@ -1,0 +1,28 @@
+public class Solution {
+    public IList<IList<int>> Subsets(int[] nums) {
+        return _Subsets(nums);
+    }
+    public static IList<IList<int>> _Subsets(int[] nums) 
+        {
+            if (nums.Count() == 0) 
+            {
+                return new List<IList<int>>();
+            }
+            List<IList<int>> result = new List<IList<int>>();
+            Recurtion(result, nums, new List<int>(), 0);
+            return result;
+        }
+        private static void Recurtion(List<IList<int>> result, int[] nums, List<int> current, int lastNumberIndex) 
+        {
+            if (!result.Contains(current)) 
+            {
+                result.Add(new List<int> (current));
+            }
+            for (int i = lastNumberIndex; i < nums.Length; i++) 
+            {
+                current.Add(nums[i]);
+                Recurtion(result, nums, current, i + 1);
+                current.RemoveAt(current.Count() - 1);
+            }
+        }
+}

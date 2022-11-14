@@ -1,0 +1,63 @@
+public class Solution {
+    public ListNode DeleteDuplicates(ListNode head) 
+    {
+        return head == null ? null :SortList(head);
+    }
+    public static ListNode SortList(ListNode head) 
+        {
+            Stack<ListNode> pastNodes = new Stack<ListNode>();
+            for(var current = head; current != null; current = current.next) 
+            {
+                if (pastNodes.Count() > 0)
+                {
+                    if (pastNodes.Peek().val != current.val)
+                    {
+                        pastNodes.Push(new ListNode(current.val));
+                    }
+                    else
+                    {
+                        try
+                        {
+                            if (current.next.val == pastNodes.Peek().val)
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                while (pastNodes.Count() > 0 && pastNodes.Peek().val == current.val)
+                                {
+                                    pastNodes.Pop();
+                                }
+                            }
+                        }
+                        catch 
+                        {
+                            while (pastNodes.Count() > 0 && pastNodes.Peek().val == current.val)
+                            {
+                                pastNodes.Pop();
+                            }
+                        }
+                        
+                    }
+                }
+                else 
+                {
+                    pastNodes.Push(new ListNode(current.val));
+                }
+            }
+            if (pastNodes.Count() == 0) 
+            {
+                return null;
+            }
+            pastNodes = new Stack<ListNode>(pastNodes);
+            ListNode result = new ListNode(pastNodes.Pop().val);
+            ListNode last = result;
+            int pastNodesLength = pastNodes.Count();
+            for (int i = 0; i < pastNodesLength; i++) 
+            {
+                last.next = new ListNode(pastNodes.Pop().val);
+                last = last.next;
+            }
+            return result;
+        }
+}

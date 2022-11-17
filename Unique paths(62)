@@ -1,0 +1,23 @@
+public class Solution {
+    public int UniquePaths(int m, int n) 
+    {
+        return FindAllUniquePaths(m, n);
+    }
+    public static int FindAllUniquePaths(int m, int n)
+        {
+            int[,] map = new int[m + 1, n + 1];
+            return Helper(m, n, map);
+        }
+        public static int Helper(int m, int n, int[,] map) 
+        {
+            if (m == 1 || n == 1)
+            {
+                return 1;
+            }
+            if (map[m, n] != 0)
+            {
+                return map[m, n];
+            }
+            return map[m, n] = Helper(m - 1, n, map) + Helper(m, n - 1, map);
+        }
+}

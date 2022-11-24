@@ -1,0 +1,46 @@
+public class Solution {
+    public int NumDecodings(string s) 
+    {
+        return Code.DecodeNumber(data: s);
+    }
+}
+class Code
+    {
+        private static char[] alphabet = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
+        private static Dictionary<string, char> code = new Dictionary<string, char>();
+        public static int DecodeNumber(string data) 
+        {
+            Initialize();
+            int result = 0;
+            return Decode(data, ref result, 1);
+        }
+        private static int Decode(string line, ref int result, int lengthOfWordToTake)
+        {
+            if (line == null || line.Length == 0 || !code.ContainsKey(line[0].ToString()))
+            {
+                return result;
+            }
+            else
+            {
+                string key = string.Empty;
+                for (int k = 0; k < lengthOfWordToTake; k++)
+                {
+                    key += line[0];
+                    line = line.Remove(0, 1);
+                }
+                var value = code[key];
+                line = line.TrimStart(value);
+                result++;
+                Decode(line, ref result, 1);
+
+            }
+            return result;
+        }
+        private static void Initialize() 
+        {
+            for (int i = 0; i < alphabet.Length; i++) 
+            {
+                code.Add($"{i + 1}", alphabet[i]);
+            }
+        }
+    }

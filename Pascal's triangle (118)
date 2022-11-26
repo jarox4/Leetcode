@@ -1,0 +1,50 @@
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.Globalization;
+using System.Reflection.Metadata.Ecma335;
+using System.Runtime.ExceptionServices;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading;
+using System.Linq;
+using System.Drawing;
+using UsefulData;
+
+namespace Program
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var result = PascalsTriangle.Create(4);
+        }
+    }
+    class PascalsTriangle 
+    {
+        public static IList<IList<int>> Create(int numRows) 
+        {
+            if (numRows <= 0) 
+            {
+                return null;
+            }
+            if (numRows == 1) 
+            {
+                return new List<IList<int>> { new List<int> { 1 } };
+            }
+            List<IList<int>> result = new List<IList<int>> { new List<int> { 1 }, new List<int> { 1, 1 } };
+            for (int i = 2; i < numRows; i++) 
+            {
+                List<int> current = new List<int>(result.Last());
+                List<int> next = new List<int>();
+                next.Add(1);
+                for (int k = 1; k < current.Count(); k++) 
+                {
+                    next.Add(current[k] + current[k - 1]);
+                }
+                next.Add(1);
+                result.Add(next);
+            }
+            return result;
+        }
+    }
+}

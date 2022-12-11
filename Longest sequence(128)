@@ -1,0 +1,37 @@
+public class Solution {
+    public int LongestConsecutive(int[] nums) 
+    {
+        return Length(nums);
+    }
+    public static int Length(int[] nums) 
+        {
+            if (nums.Length == 0) 
+            {
+                return 0;
+            }
+            Array.Sort(nums);
+            int currentLength = 1;
+            int longest = -1;
+            int previousNumber = int.MinValue;
+            for (int i = 0; i < nums.Count() - 1; i++) // we dont take the last element because we always take the next element so the last one is already counted
+            {
+                if (previousNumber == nums[i])
+                {
+                    continue;
+                }
+                if (nums.Contains(nums[i] + 1))
+                {
+                    currentLength++;
+                }
+                else 
+                {
+                    longest = currentLength > longest ? currentLength : longest;
+                    currentLength = 1;
+                }
+                previousNumber = nums[i];
+            }
+            longest = currentLength > longest ? currentLength : longest;
+            currentLength = 1;
+            return longest;
+        }
+}

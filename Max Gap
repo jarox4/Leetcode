@@ -1,0 +1,24 @@
+using System.Threading.Tasks;
+public class Solution {
+    public int MaximumGap(int[] nums) {
+        return MaxGap(nums);
+    }
+    private int MaxGap(int[] nums) {
+            var list = new List<int>();
+            Array.Sort(nums);
+            for(int i = 0; i < nums.Length; i++) {
+                list.Add(FindDifference(nums, i));
+            }
+            return list.Max();
+        }
+        private int FindDifference (int[] nums, int index) {
+            int result = 0;
+            try {
+                    result = nums[index + 1] - nums[index];
+                }
+                catch {
+
+                }
+            return result;
+        }
+}

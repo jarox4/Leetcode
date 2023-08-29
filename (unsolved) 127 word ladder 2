@@ -1,0 +1,52 @@
+public class Solution {
+    public int LadderLength(string beginWord, string endWord, IList<string> wordList) {
+        List<IList<string>> all = WordLadderRecursion(new List<string>(), beginWord, wordList, endWord);
+        if(all.Count == 0) {
+            return 0;
+        }
+        List<string> shortest = GetShortest(all);
+        return shortest.Count;
+    }
+    private List<IList<string>> WordLadderRecursion(List<string> pastWords, string curWord,  IList<string> words, string endWord) {
+            List<IList<string>> result = new List<IList<string>>();
+            if (curWord == endWord) {
+                result.Add(new List<string>() { curWord });
+                return result;
+            }
+            pastWords.Add(curWord);
+            IList<string> nextWords = GetAllNextWords(curWord, words, pastWords);
+            foreach (string word in nextWords) {
+                List<IList<string>> other = WordLadderRecursion(pastWords, word, words, endWord);
+                pastWords.Remove(word);
+                for(int i = 0; i < other.Count; i++) {
+                    other[i] = other[i].Prepend(curWord).ToList();
+                }
+                result.AddRange(other);
+            }
+            return result;
+
+        }
+        private IList<string> GetAllNextWords(string curWord, IList<string> words, List<string> pastWords) {
+            List<string> result = new List<string>();
+            string wordToLookFor = "";
+            for(int i = 0; i < curWord.Length; i++) {
+                wordToLookFor = curWord;
+                for(char let = 'a'; let <= 'z'; let++) {
+                    wordToLookFor = wordToLookFor.Remove(i, 1);
+                    wordToLookFor = wordToLookFor.Insert(i, let.ToString());
+                    if(!pastWords.Contains(wordToLookFor) && words.Contains(wordToLookFor)) {
+                        result.Add(wordToLookFor);
+                    }
+                }
+            }
+            return result;
+        }
+        private List<string> GetShortest(List<IList<string>> sequences) {
+            List<int> lengths = new List<int>();
+            foreach (IList<string> sequence in sequences) {
+                lengths.Add(sequence.Count);
+            }
+            IList<string> result = sequences.Find(x => x.Count == lengths.Min());
+            return result?.ToList() == null ? new List<string>() : result.ToList();
+        }
+}

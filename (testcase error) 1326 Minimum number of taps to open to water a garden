@@ -1,0 +1,58 @@
+public class Solution {
+    public int MinTaps(int n, int[] ranges) {
+        return MinAmountOfTaps(n, ranges);
+    }
+    private int MinAmountOfTaps(int n, int[] ranges) {
+            List<Tuple<int, int>> allWorkRanges = new List<Tuple<int, int>>();
+            Tuple<int, int> cur;
+            for (int i = 0; i < ranges.Length; i++) {
+                cur = GetTapRange(n, ranges, i);
+                allWorkRanges.Add(cur);
+            }
+            int amountOfTaps = 0;
+            int index = GetBestFirstTap(n, allWorkRanges, ranges);
+            while(index != -1) {
+                index = GetNextTapIndex(index, n, allWorkRanges, ranges);
+                amountOfTaps++;
+            }
+            if(amountOfTaps == 0) {
+                return -1;
+            }
+            return amountOfTaps;
+        }
+        private int GetBestFirstTap(int n, List<Tuple<int, int>> allWorkRanges, int[] ranges) {
+            List<Tuple<int, int>> bestRanges = allWorkRanges.FindAll(x => x.Item1 == 0);
+            bestRanges = bestRanges.FindAll(x => x.Item1 != x.Item2);
+            bestRanges = bestRanges.OrderBy(x => x.Item2).ToList();
+            bestRanges.Reverse();
+            if(bestRanges.Count > 0) {
+                Tuple<int,int> bestTapRange = bestRanges.First();
+                return allWorkRanges.IndexOf(bestTapRange);
+            }
+            else {
+                return -1;
+            }
+        }
+        private Tuple<int,int> GetTapRange(int n, int[] ranges, int index) {
+            int min = Math.Max(index - ranges[index], 0);
+            int max = Math.Min(index + ranges[index], n);
+            return Tuple.Create(min, max);
+        }
+        private int GetNextTapIndex(int index, int n, List<Tuple<int, int>> allWorkRanges, int[] ranges) {
+            int maxRangeOfCurrent = allWorkRanges[index].Item2;
+            if (index == n - 1 || maxRangeOfCurrent >= n) {
+                return -1;
+            }
+            else {
+                List<Tuple<int, int>> allThatCanContinue = allWorkRanges.FindAll(x => x.Item1 <= maxRangeOfCurrent + 1);
+                allThatCanContinue = allThatCanContinue.FindAll(x => x.Item1 != x.Item2);
+                if(allThatCanContinue.Count == 0) {
+                    return -1;
+                }
+                allThatCanContinue = allThatCanContinue.OrderBy(x => x.Item2).ToList();
+                allThatCanContinue.Reverse();
+                Tuple<int, int> bestTapRange = allThatCanContinue[0];
+                return allWorkRanges.IndexOf(bestTapRange);
+            }
+        }
+}
